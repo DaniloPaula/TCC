@@ -1,0 +1,12 @@
+data_cleaned/
+*.html
+*.pdf
+*.png
+*.zip
+*.csv
+*.jpg
+*.jpeg
+*.docx
+*.xlsx
+*.xlsm
+*.pptx
