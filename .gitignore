@@ -1,5 +1,4 @@
 data_cleaned/
-*.html
 *.pdf
 *.png
 *.zip
@@ -9,5 +8,4 @@ data_cleaned/
 *.docx
 *.xlsx
 *.xlsm
-*.pptx
 *.doc
