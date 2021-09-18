@@ -1,0 +1,125 @@
+\begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{folium}
+\PY{k+kn}{from} \PY{n+nn}{folium}\PY{n+nn}{.}\PY{n+nn}{plugins} \PY{k+kn}{import} \PY{n}{MarkerCluster}
+\PY{k+kn}{from} \PY{n+nn}{folium}\PY{n+nn}{.}\PY{n+nn}{plugins} \PY{k+kn}{import} \PY{n}{HeatMap}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}furtos} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{D:}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{EPS}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{TCC}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{data\PYZus{}cleaned}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{SSP}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{furtos\PYZus{}2018.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{decimal}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}furtos}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}furtos}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{n}{subset}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BAIRRO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{df\PYZus{}furtos}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{n}{subset}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CIDADE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}furtos}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LONGITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}furtos}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LONGITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{str}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{,}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)}
+\PY{n}{df\PYZus{}furtos}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{n}{subset}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LONGITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{df\PYZus{}furtos}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LATITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}furtos}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LATITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{str}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{,}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)}
+\PY{n}{df\PYZus{}furtos}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{n}{subset}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LATITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Inicializamos o mapa com as coordenadas centrais da cidade de São Paulo}
+\PY{n}{mapa} \PY{o}{=} \PY{n}{folium}\PY{o}{.}\PY{n}{Map}\PY{p}{(}\PY{n}{location}\PY{o}{=}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mf}{23.5475}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mf}{46.63611}\PY{p}{]}\PY{p}{,} \PY{n}{control\PYZus{}scale}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Passamos as latitudes e longitudes para listas para poder adicionar ao mapa}
+\PY{n}{lat} \PY{o}{=} \PY{n}{df\PYZus{}furtos}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LATITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+\PY{n}{lng} \PY{o}{=} \PY{n}{df\PYZus{}furtos}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LONGITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+\PY{n}{lista} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{zip}\PY{p}{(}\PY{n}{lat}\PY{p}{,} \PY{n}{lng}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Adicionamos a lista ao mapa e salvamos no formato de HTML}
+\PY{n}{HeatMap}\PY{p}{(}\PY{n}{lista}\PY{p}{)}\PY{o}{.}\PY{n}{add\PYZus{}to}\PY{p}{(}\PY{n}{mapa}\PY{p}{)}
+\PY{n}{mapa}\PY{o}{.}\PY{n}{save}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Heat\PYZus{}SP\PYZus{}Furtos\PYZus{}2018.html}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Aqui recriamos o mapa, mas agora com marcadores}
+\PY{n}{mapa} \PY{o}{=} \PY{n}{folium}\PY{o}{.}\PY{n}{Map}\PY{p}{(}\PY{n}{location}\PY{o}{=}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mf}{23.5475}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mf}{46.63611}\PY{p}{]}\PY{p}{,} \PY{n}{control\PYZus{}scale}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{mc} \PY{o}{=} \PY{n}{MarkerCluster}\PY{p}{(}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Contamos cada par de latitude e longitude e adicionamos a um marcador e salvamos o mapa como HTML}
+\PY{k}{for} \PY{n}{val} \PY{o+ow}{in} \PY{n}{lista}\PY{p}{:}
+    \PY{n}{mc}\PY{o}{.}\PY{n}{add\PYZus{}child}\PY{p}{(}\PY{n}{folium}\PY{o}{.}\PY{n}{Marker}\PY{p}{(}\PY{p}{[}\PY{n}{val}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{val}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{icon}\PY{o}{=}\PY{n}{folium}\PY{o}{.}\PY{n}{Icon}\PY{p}{(}\PY{n}{icon}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{book}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{add\PYZus{}to}\PY{p}{(}\PY{n}{mapa}\PY{p}{)}
+\PY{n}{mapa}\PY{o}{.}\PY{n}{save}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Marker\PYZus{}SP\PYZus{}Furtos\PYZus{}2018.html}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}roubos} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{D:}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{EPS}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{TCC}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{data\PYZus{}cleaned}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{SSP}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{roubos\PYZus{}2018.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{decimal}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}roubos}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{n}{subset}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BAIRRO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{df\PYZus{}roubos}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{n}{subset}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CIDADE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df\PYZus{}roubos}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LONGITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}roubos}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LONGITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{str}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{,}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)}
+\PY{n}{df\PYZus{}roubos}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{n}{subset}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LONGITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{df\PYZus{}roubos}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LATITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}roubos}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LATITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{str}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{,}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)}
+\PY{n}{df\PYZus{}roubos}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{n}{subset}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LATITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Inicializamos o mapa com as coordenadas centrais da cidade de São Paulo}
+\PY{n}{mapa} \PY{o}{=} \PY{n}{folium}\PY{o}{.}\PY{n}{Map}\PY{p}{(}\PY{n}{location}\PY{o}{=}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mf}{23.5475}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mf}{46.63611}\PY{p}{]}\PY{p}{,} \PY{n}{control\PYZus{}scale}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Passamos as latitudes e longitudes para listas para poder adicionar ao mapa}
+\PY{n}{lat} \PY{o}{=} \PY{n}{df\PYZus{}roubos}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LATITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+\PY{n}{lng} \PY{o}{=} \PY{n}{df\PYZus{}roubos}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LONGITUDE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+\PY{n}{lista} \PY{o}{=} \PY{n+nb}{list}\PY{p}{(}\PY{n+nb}{zip}\PY{p}{(}\PY{n}{lat}\PY{p}{,} \PY{n}{lng}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Adicionamos a lista ao mapa e salvamos no formato de HTML}
+\PY{n}{HeatMap}\PY{p}{(}\PY{n}{lista}\PY{p}{)}\PY{o}{.}\PY{n}{add\PYZus{}to}\PY{p}{(}\PY{n}{mapa}\PY{p}{)}
+\PY{n}{mapa}\PY{o}{.}\PY{n}{save}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Heat\PYZus{}SP\PYZus{}Roubos\PYZus{}2018.html}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Aqui recriamos o mapa, mas agora com marcadores}
+\PY{n}{mapa} \PY{o}{=} \PY{n}{folium}\PY{o}{.}\PY{n}{Map}\PY{p}{(}\PY{n}{location}\PY{o}{=}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mf}{23.5475}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mf}{46.63611}\PY{p}{]}\PY{p}{,} \PY{n}{control\PYZus{}scale}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+\PY{n}{mc} \PY{o}{=} \PY{n}{MarkerCluster}\PY{p}{(}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Contamos cada par de latitude e longitude e adicionamos a um marcador e salvamos o mapa como HTML}
+\PY{k}{for} \PY{n}{val} \PY{o+ow}{in} \PY{n}{lista}\PY{p}{:}
+    \PY{n}{mc}\PY{o}{.}\PY{n}{add\PYZus{}child}\PY{p}{(}\PY{n}{folium}\PY{o}{.}\PY{n}{Marker}\PY{p}{(}\PY{p}{[}\PY{n}{val}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{val}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{icon}\PY{o}{=}\PY{n}{folium}\PY{o}{.}\PY{n}{Icon}\PY{p}{(}\PY{n}{icon}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{book}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{add\PYZus{}to}\PY{p}{(}\PY{n}{mapa}\PY{p}{)}
+\PY{n}{mapa}\PY{o}{.}\PY{n}{save}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Marker\PYZus{}SP\PYZus{}Roubos\PYZus{}2018.html}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}

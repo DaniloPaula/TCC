@@ -1,0 +1,61 @@
+\begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k+kn}{import} \PY{n+nn}{os}
+\PY{k+kn}{import} \PY{n+nn}{csv}
+\PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Empilhamos um primeiro arquivo de furtos para poder empilhar os outros nele}
+\PY{n}{df1} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{D:}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Danilo}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Desktop}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{EPS}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{TCC}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{data\PYZus{}cleaned}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{SSP}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Furtos de veiculos}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{DadosBO\PYZus{}2003\PYZus{}1.xls}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{usecols} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A:AB,AJ,AL,AU:BB}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{converters}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ANO\PYZus{}FABRICACAO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{int}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ANO\PYZus{}MODELO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{int}\PY{p}{\PYZcb{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Nao necessariamente um arquivo de um dado mes tem dados daquele mes. Por isso empilhamos tudo}
+\PY{k}{for} \PY{n}{filename} \PY{o+ow}{in} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{D:}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Danilo}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Desktop}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{EPS}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{TCC}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{data\PYZus{}cleaned}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{SSP}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Furtos de veiculos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if}\PY{p}{(}\PY{n}{filename} \PY{o}{!=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DadosBO\PYZus{}2003\PYZus{}1.xls}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{D:}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Danilo}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Desktop}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{EPS}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{TCC}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{data\PYZus{}cleaned}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{SSP}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Furtos de veiculos}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{+}\PY{n}{filename}\PY{p}{,} \PY{n}{usecols} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A:AB,AJ,AL,AU:BB}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{converters}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ANO\PYZus{}FABRICACAO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{int}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ANO\PYZus{}MODELO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{int}\PY{p}{\PYZcb{}}\PY{p}{)}
+        \PY{n}{df1} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{df1}\PY{p}{,} \PY{n}{df}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df1}\PY{o}{.}\PY{n}{to\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{D:}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Danilo}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Desktop}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{EPS}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{TCC}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{data\PYZus{}cleaned}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{SSP}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{furtosConcat.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Empilhamos um primeiro arquivo de roubos para poder empilhar os outros nele}
+\PY{n}{df1} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{D:}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Danilo}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Desktop}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{EPS}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{TCC}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{data\PYZus{}cleaned}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{SSP}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Roubos de veiculos}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{DadosBO\PYZus{}2003\PYZus{}1.xls}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{usecols} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A:AB,AJ,AL,AU:BB}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{converters}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ANO\PYZus{}FABRICACAO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{int}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ANO\PYZus{}MODELO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{int}\PY{p}{\PYZcb{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Nao necessariamente um arquivo de um dado mes tem dados daquele mes. Por isso empilhamos tudo}
+\PY{k}{for} \PY{n}{filename} \PY{o+ow}{in} \PY{n}{os}\PY{o}{.}\PY{n}{listdir}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{D:}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Danilo}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Desktop}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{EPS}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{TCC}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{data\PYZus{}cleaned}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{SSP}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Roubos de veiculos}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+    \PY{k}{if}\PY{p}{(}\PY{n}{filename} \PY{o}{!=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DadosBO\PYZus{}2003\PYZus{}1.xls}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n}{df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{D:}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Danilo}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Desktop}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{EPS}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{TCC}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{data\PYZus{}cleaned}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{SSP}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Roubos de veiculos}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{+}\PY{n}{filename}\PY{p}{,} \PY{n}{usecols} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A:AB,AJ,AL,AU:BB}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{converters}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ANO\PYZus{}FABRICACAO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{int}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ANO\PYZus{}MODELO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}\PY{n+nb}{int}\PY{p}{\PYZcb{}}\PY{p}{)}
+        \PY{n}{df1} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{df1}\PY{p}{,} \PY{n}{df}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{df1}\PY{o}{.}\PY{n}{to\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{D:}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Danilo}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{Desktop}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{EPS}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{TCC}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{data\PYZus{}cleaned}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{SSP}\PY{l+s+se}{\PYZbs{}\PYZbs{}}\PY{l+s+s1}{roubosConcat.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{sep}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}

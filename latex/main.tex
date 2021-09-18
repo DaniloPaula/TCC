@@ -1,0 +1,1131 @@
+\documentclass[
+	12pt,
+	openright,			% capítulos começam em pág ímpar (insere página vazia caso preciso)
+	twoside,			% para impressão em verso e anverso. Oposto a oneside
+	a4paper,			% tamanho do papel. 
+	% -- opções da classe abntex2 --
+	chapter=TITLE,		% títulos de capítulos convertidos em letras maiúsculas
+	section=TITLE,		% títulos de seções convertidos em letras maiúsculas
+	subsection=TITLE,	% títulos de subseções convertidos em letras maiúsculas
+	subsubsection=TITLE,% títulos de subsubseções convertidos em letras maiúsculas
+	% -- opções do pacote babel --
+	english,			% idioma adicional para hifenização
+	french,				% idioma adicional para hifenização
+	spanish,			% idioma adicional para hifenização
+	brazil				% o último idioma é o principal do documento
+	]{abntex2}
+\usepackage{times}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{anysize}
+\usepackage{appendix}
+\usepackage{lscape} 
+\usepackage{pdflscape}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{setspace}
+\usepackage{enumerate} 
+\usepackage{xcolor}
+\usepackage[bottom]{footmisc}
+\usepackage{subfiles}
+\usepackage[breakable]{tcolorbox}
+\usepackage{parskip}
+\usepackage{mathpazo}
+\usepackage{iftex}
+\usepackage{caption}
+\usepackage[Export]{adjustbox}
+\usepackage{geometry}
+\usepackage{textcomp}
+\usepackage{upquote}
+\usepackage{eurosym}
+\usepackage{fancyvrb}
+\usepackage{grffile}
+\usepackage{hyperref}
+\usepackage{titling}
+\usepackage{booktabs}
+\usepackage[normalem]{ulem}
+\usepackage{mathrsfs}
+\usepackage{lmodern}
+\usepackage{indentfirst}
+\usepackage[style=abnt]{biblatex}
+
+%----------------------------------------------------------------------------------------
+%	CONFIGURAÇÕES NECESSÁRIAS NO PREAMBULO
+%----------------------------------------------------------------------------------------
+\addbibresource{refers.bib}
+\pdfstringdefDisableCommands{\let\uppercase\relax}
+% defines textquotesingle
+% Hack from http://tex.stackexchange.com/a/47451/13684:
+\AtBeginDocument{%
+    \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+}
+
+%----------------------------------------------------------------------------------------
+% Informações de dados para CAPA e FOLHA DE ROSTO
+%----------------------------------------------------------------------------------------
+\titulo{Análise Estatística do Banco de Dados de Furtos e Roubos de Carros da Secretaria de Segurança Pública do Estado de São Paulo}
+\autor{Danilo de Paula Perl}
+\local{Brasil}
+\data{2020}
+\orientador{Prof.ª Dr.ª Cláudia Monteiro Peixoto}
+\instituicao{%
+  UNIVERSIDADE DE SÃO PAULO -- USP
+  \par
+  INSTITUTO DE MATEMÁTICA E ESTATÍSTICA}
+\tipotrabalho{Trabalho de Conclusão de Curso}
+% O preambulo deve conter o tipo do trabalho, o objetivo, 
+% o nome da instituição e a área de concentração 
+\preambulo{TRABALHO DE CONCLUSÃO DO CURSO DE BACHARELADO EM MATEMÁTICA APLICADA E COMPUTACIONAL COM ÊNFASE EM CIÊNCIAS ATUARIAIS.}
+
+\makeindex
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	CONFIGURAÇÃO
+%----------------------------------------------------------------------------------------
+
+\frenchspacing
+% O tamanho do parágrafo é dado por:
+\setlength{\parindent}{1.3cm}
+% Controle do espaçamento entre um parágrafo e outro:
+\setlength{\parskip}{0.2cm}
+\marginsize{3.0cm}{3.0cm}{3.0cm}{3.0cm}
+\newcommand{\me}{\mathrm{e}}
+\newtheorem{theorem}{Teorema}
+\newtheorem{prop}{Proposição}
+\renewcommand{\baselinestretch}{1.0}
+% \renewcommand{\appendixname}{Anexo}
+% \renewcommand{\appendixtocname}{Anexo}
+% \renewcommand{\appendixpagename}{Anexos}
+\renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
+% \renewcommand*{\tablename}{Tabelas}
+% \renewcommand*{\chaptername}{Capítulo}
+\renewcommand*{\thechapter}{\Roman{chapter}}
+\renewcommand{\thesection}{\arabic{chapter}.\arabic{section}}
+\renewcommand{\figurename}{Figura}
+\renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}}
+\renewcommand{\theequation}{\arabic{chapter}.\arabic{equation}}
+\hypersetup{%
+    breaklinks=true,
+    urlcolor=urlcolor,
+    citecolor=citecolor,
+    pdftitle={\@title},
+    pdfauthor={\@author},
+    pdfsubject={\imprimirpreambulo},
+    pdfcreator={LaTeX with abnTeX2},
+    pdfkeywords={abnt}{latex}{abntex}{abntex2}{trabalho acadêmico},
+    linkcolor=blue,
+    citecolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+    bookmarksdepth=4
+}
+\lstset{
+    basicstyle=\ttfamily,
+    columns=fullflexible,
+    breaklines=true,
+    postbreak=\raisebox{0ex}[0ex][0ex]{\color{red}$\hookrightarrow$\space},
+    literate=
+    {á}{{\'a}}1
+    {à}{{\`a}}1
+    {ã}{{\~a}}1
+    {Ã}{{\~A}}1
+    {é}{{\'e}}1
+    {ê}{{\^e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {õ}{{\~o}}1
+    {ú}{{\'u}}1
+    {ü}{{\"u}}1
+    {ç}{{\c{c}}}1,
+    language=Python
+}
+\newenvironment{Shaded}{}{}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\NormalTok}[1]{{#1}}
+\makeatletter
+\def\maxwidth#1{\ifdim\Gin@nat@width>#1 #1\else\Gin@nat@width\fi}
+\makeatother
+% Additional commands for more recent versions of Pandoc
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+\newcommand{\ImportTok}[1]{{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+\newcommand{\BuiltInTok}[1]{{#1}}
+\newcommand{\ExtensionTok}[1]{{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+
+ % Used to constrain images to a maximum size
+\adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+\floatplacement{figure}{H} % forces figures to be placed at the correct location
+
+\makeatletter % fix for grffile with XeLaTeX
+\def\Gread@@xetex#1{%
+  \IfFileExists{"\Gin@base".bb}%
+  {\Gread@eps{\Gin@base.bb}}%
+  {\Gread@@xetex@aux#1}%
+}
+\makeatother
+% Colors for the hyperref package
+% \definecolor{urlcolor}{rgb}{0,.145,.698}
+% \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+% \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+% ANSI colors
+\definecolor{ansi-black}{HTML}{3E424D}
+\definecolor{ansi-black-intense}{HTML}{282C36}
+\definecolor{ansi-red}{HTML}{E75C58}
+\definecolor{ansi-red-intense}{HTML}{B22B31}
+\definecolor{ansi-green}{HTML}{00A250}
+\definecolor{ansi-green-intense}{HTML}{007427}
+\definecolor{ansi-yellow}{HTML}{DDB62B}
+\definecolor{ansi-yellow-intense}{HTML}{B27D12}
+\definecolor{ansi-blue}{HTML}{208FFB}
+\definecolor{ansi-blue-intense}{HTML}{0065CA}
+\definecolor{ansi-magenta}{HTML}{D160C4}
+\definecolor{ansi-magenta-intense}{HTML}{A03196}
+\definecolor{ansi-cyan}{HTML}{60C6C8}
+\definecolor{ansi-cyan-intense}{HTML}{258F8F}
+\definecolor{ansi-white}{HTML}{C5C1B4}
+\definecolor{ansi-white-intense}{HTML}{A1A6B2}
+\definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+\definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+% commands and environments needed by pandoc snippets
+% extracted from the output of `pandoc -s`
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0.2cm}}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+
+% Define a nice break command that doesn't care if a line doesn't already
+% exist.
+\def\br{\hspace*{\fill} \\* }
+% Math Jax compatibility definitions
+\def\gt{>}
+\def\lt{<}
+\let\Oldtex\TeX
+\let\Oldlatex\LaTeX
+\renewcommand{\TeX}{\textrm{\Oldtex}}
+\renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        \ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}
+    }
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+
+%----------------------------------------------------------------------------------------
+%	CAPA
+%----------------------------------------------------------------------------------------
+
+\imprimircapa
+\imprimirfolhaderosto*
+
+%----------------------------------------------------------------------------------------
+%	Dedicatória
+%----------------------------------------------------------------------------------------
+
+% \begin{dedicatoria}
+%   \vspace*{\fill}
+%   \centering
+%   \noindent
+%   \textit{Texto da dedicatória} \vspace*{\fill}
+% \end{dedicatoria}
+
+%----------------------------------------------------------------------------------------
+%	Agradecimentos
+%----------------------------------------------------------------------------------------
+
+\begin{agradecimentos}
+Agradeço primeiramente a Deus por ter me conduzido durante todos os anos da graduação e de forma específica neste projeto com sabedoria, saúde e forças para chegar até o final.
+
+Sou grato à minha mãe pelo apoio que sempre me deu durante toda a minha vida, principalmente durante a elaboração deste projeto.
+
+Deixo aqui registrado um agradecimento especial à minha orientadora Professora Doutora Cláudia Monteiro Peixoto pela dedicação do seu escasso tempo ao meu trabalho de conclusão de curso.
+
+Também quero agradecer à Universidade de São Paulo e a todos os professores do meu curso pela elevada qualidade do ensino oferecido.
+\end{agradecimentos}
+
+%----------------------------------------------------------------------------------------
+%	Resumo
+%----------------------------------------------------------------------------------------
+
+% resumo em português
+\setlength{\absparsep}{18pt} % ajusta o espaçamento dos parágrafos do resumo
+\begin{resumo}
+Com o incentivo aos programas de transparência das instituições públicas e com o aumento crescente da liberação de bases de dados públicos, torna-se cada vez mais importante ter trabalhos acadêmicos que analisem e explorem tais informações para obter conclusões e poder auxiliar os órgãos públicos. Diante disso, este trabalho tem por objetivo fazer a análise estatística do banco de dados de furtos e roubos de carros da Secretaria de Segurança Pública do Estado de São Paulo no ano de 2018. Inicialmente, buscamos realizar uma análise descritiva para a quantidade de furtos e roubos por dia da semana e por período do dia, além de dois testes de aderência para verificar se a distribuição da quantidade de furtos e roubos de carros por dia da semana se aproxima de uma \textit{Poisson}.
+Como resultado, observamos, em média, mais roubos do que furtos em cada dia da semana e que ocorrem em média mais roubos do que furtos de noite e de madrugada. Para ambos os testes de aderência, não encontramos evidências para aceitar a hipótese nula, que diz que a distribuição de ocorrências de furtos/roubos para cada dia da semana do ano de 2018 se aproxima de uma \textit{Poisson}.
+
+   \vspace{\onelineskip}
+ 
+   \noindent
+    \textbf{Palavras-chaves}: Distribuição de \textit{Poisson}. Teste de hipótese. Teste Qui-Quadrado.
+\end{resumo}
+
+% resumo em inglês
+\begin{resumo}[Abstract]
+ \begin{otherlanguage*}{english}
+With the incentive to transparency programs of public institutions and with the increasing release of public databases, it becomes more and more important to have academic works that analyze and explore this information to obtain conclusions and be able to assist public agencies. Therefore, this work aims to perform a statistical analysis of the database of thefts and robberies of cars of the São Paulo State Public Security Secretariat in the year 2018. Initially, we sought to perform a descriptive analysis for the number of thefts and robberies per day of the week and per period of the day, in addition to two adherence tests to verify if the distribution of the number of thefts and robberies of cars per day of the week approaches a \textit{Poisson}.
+As a result, we see, on average, more robberies than thefts on each day of the week, and on average, more robberies occur than night and dawn thefts. For both adherence tests, we found no evidence to accept the null hypothesis, which says that the distribution of thefts/robberies for each day of the week in the year 2018 approaches a \textit{Poisson}.
+
+   \vspace{\onelineskip}
+ 
+   \noindent
+   \textbf{Key-words}: \textit{Poisson} distribution. Hypothesis test. Chi-Square test.
+ \end{otherlanguage*}
+\end{resumo}
+
+%----------------------------------------------------------------------------------------
+% inserir lista de ilustrações
+%----------------------------------------------------------------------------------------
+\pdfbookmark[0]{\listfigurename}{lof}
+\listoffigures*
+\cleardoublepage
+
+%----------------------------------------------------------------------------------------
+% inserir lista de tabelas
+%----------------------------------------------------------------------------------------
+\pdfbookmark[0]{\listtablename}{lot}
+\listoftables*
+\cleardoublepage
+
+%----------------------------------------------------------------------------------------
+% inserir lista de abreviaturas e siglas
+%----------------------------------------------------------------------------------------
+% \begin{siglas}
+%   \item[ABNT] Associação Brasileira de Normas Técnicas
+%   \item[abnTeX] ABsurdas Normas para TeX
+% \end{siglas}
+
+%----------------------------------------------------------------------------------------
+% inserir lista de símbolos
+%----------------------------------------------------------------------------------------
+% \begin{simbolos}
+%   \item[$ \Gamma $] Letra grega Gama
+%   \item[$ \Lambda $] Lambda
+%   \item[$ \zeta $] Letra grega minúscula zeta
+%   \item[$ \in $] Pertence
+% \end{simbolos}
+
+%----------------------------------------------------------------------------------------
+% inserir o sumario
+%----------------------------------------------------------------------------------------
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents*
+\cleardoublepage
+
+%----------------------------------------------------------------------------------------
+% ELEMENTOS TEXTUAIS
+%----------------------------------------------------------------------------------------
+\textual
+
+%----------------------------------------------------------------------------------------
+%	INTRODUÇÃO
+%----------------------------------------------------------------------------------------
+
+\chapter*[Introdução]{Introdução}
+\addcontentsline{toc}{chapter}{Introdução}
+A análise estatística de bases de dados públicas é útil não somente para obter conclusões mas também para poder auxiliar instituições públicas a utilizarem seus dados da melhor maneira.
+Utilizando como base a tese de mestrado \cite{ruina} que parte do pressuposto "Aqui é dado especial destaque ao caso em que o processo do número de indenizações é de \textit{Poisson}", tivemos inicial interesse em reafirmar este artigo com os dados públicos da SUSEP \url{http://www2.susep.gov.br/menuestatistica/Autoseg/principal.aspx}.
+Porém, devido a várias questões levantadas sobre a base de dados, resolvemos apenas realizar uma análise descritiva dos dados de furtos e roubos de carros da Secretaria de Segurança Pública do Estado de São Paulo e testar se as distribuições dos furtos e roubos podem ser aproximadas por distribuições de \textit{Poisson}. Assim, se tivermos uma distribuição de \textit{Poisson} para número de roubos e furtos, seria mais crível que o número de indenizações também teria uma distribuição de \textit{Poisson}.
+Para isso, acessamos as bases de dados em \url{http://www.ssp.sp.gov.br/transparenciassp/Consulta.aspx}, realizamos alguns tratamentos descritos no texto e iniciamos a análise estatística e o desenvolvimento dos testes de Aderência. Todos as análises foram feitas utilizando a linguagem de programação Python juntamente com os pacotes científicos como Pandas, Numpy, Folium, entre outros.
+
+Vale destacar aqui a diferença entre furto e roubo: furto é a diminuição do patrimônio de outra pessoa, sem que haja violência e o roubo é a subtração do patrimônio com ameaça ou violência.
+
+No Capítulo I há um resumo dos principais conceitos da teoria da probabilidade e estatística e, em seguida, no Capítulo II, passamos ao tratamento do banco de dados, explicitando a metodologia, e os resultados encontram-se no Capítulo III.
+%----------------------------------------------------------------------------------------
+%	CÁPITULO 1
+%----------------------------------------------------------------------------------------
+
+\chapter{CONCEITOS BÁSICOS DA TEORIA DA PROBABILIDADE}
+
+\section{Tópicos de probabilidade e estatística}
+
+Neste capítulo não temos a intenção de expor minuciosamente a teoria utilizada no trabalho, mas apenas um resumo para o leitor.
+
+\subsection{Distribuição de \textit{Poisson}}
+Na área de probabilidade e estatística, a distribuição de \textit{Poisson} é uma distribuição discreta de probabilidade que indica a probabilidade de um número de eventos do mesmo tipo e independentes entre si, ocorrer em um período de tempo.
+
+Para uma variável aleatória $X$ que segue uma distribuição de \textit{Poisson} com parâmetro $\lambda, \ \lambda > 0$, X\textasciitilde Po($\lambda$), temos que a função de probabilidade é dada por:
+\begin{equation}
+    P(X = x) = \frac{\me^{-\lambda} \lambda^{x}}{x!}, x = 0, 1, 2, ...
+\end{equation}
+
+Para a distribuição de \textit{Poisson}, temos que:
+\begin{itemize}
+    \item Esperança de $X$: $E(X) = \lambda;$
+    \item Variância de $X$: $V(X) = \lambda;$
+    \item Função Geradora de Momentos de $X$: $M_{X}(t) = \me^{\lambda(\me^{t} - 1)}, t \in \mathbb{R};$
+    \item Função Característica: $\varphi (t) = \me^{\lambda(\me^{it} - 1)}, t \in \mathbb{R}.$
+\end{itemize}
+
+\subsection{Lei Forte dos Grandes Números}
+
+\begin{theorem}
+\cite{probability_ross} Sejam $X_{1}, X_{2}, ..., X_{n}$ variáveis aleatórias independentes e identicamente distribuidas, cada uma com média finita $\mu = E(X_{i})$. Então:
+\begin{equation}
+    P\left(\lim_{n \to \infty}\frac{(X_{1} + X_{2} + ... + X_{n})}{n} = \mu\right) = 1.
+\end{equation}
+\end{theorem}
+
+\section{Teste de hipótese}
+Os testes de hipóteses são um conjunto de métodos estatísticos utilizados para tomar uma decisão (aceitar ou rejeitar a hipótese nula $H_0$) utilizando as hipóteses nula ($H_0$) ou alternativa ($H_1$).
+Na teoria dos testes de hipóteses temos ainda dois tipos de erros:
+\begin{itemize}
+    \item Erro do tipo I: é a probabilidade de se rejeitar a hipótese nula quando ela é verdadeira.
+    \item Erro do tipo II: é a probabilidade de se rejeitar a hipótese alternativa quando ela é verdadeira.
+\end{itemize}
+
+A seguir, abordaremos o método do p-valor ou nível descritivo, método este usado neste trabalho.
+
+\subsubsection{Decisão do teste baseada no nível descritivo ou p-valor}
+O p–valor é definido como a probabilidade de obter–se uma estatística do teste igual ou mais extrema (maior ou menor dependendo da hipótese alternativa) do que a estatística observada a partir de uma amostra ou de uma população assumindo–se a hipótese nula como verdadeira.
+Se o p–valor for menor que o nível de significância determinado, então não encontramos evidências para aceitar a hipótese nula.
+
+\subsubsection{Testes de Aderência}
+Os testes de aderência, são muito utilizados para testar a aderência de um modelo probabilístico (como por exemplo distribuição Normal, Exponencial, \textit{Poisson}, etc) a um conjunto de dados observado.
+
+A metodologia geral dos testes de aderência consiste em calcular a proximidade entre os dados observados (que chamamos de $O$) e os dados esperados sob a hipótese nula (que chamamos de $E$). Os dados esperados normalmente são obtidos através de geradores de números aleatórios, seguindo a distribuição de probabilidade desejada. Normalmente, em um teste de aderência, as hipóteses $H_0$ e $H_1$ são:
+\begin{itemize}
+    \item $H_0$: a população tem uma distribuição especificada.
+    \item $H_1$: a população não tem a distribuição especificada.
+\end{itemize}
+
+\subsubsection{Teste Qui-Quadrado para Aderência}
+Este teste é utilizado para verificar a qualidade do ajuste, ao comparar a distribuição das frequências observadas com as frequências esperadas.
+Neste trabalho, por exemplo, teremos a geração da seguinte tabela de frequências, na qual realizaremos um teste Qui-Quadrado para Aderência para cada dia da semana de 2018:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ |c|c|c|c| }
+    \hline
+    Categoria & Freq. Observada & Freq. Esperada \\
+    \hline
+    Segunda & $O_1$ & $E_1$ \\
+    \vdots & \vdots & \vdots \\
+    Segunda & $O_{53}$ & $E_{53}$ \\
+    Terça & $O_1$ & $E_1$ \\
+    \vdots & \vdots & \vdots \\
+    Terça & $O_{52}$ & $E_{52}$ \\
+    \vdots & \vdots & \vdots \\
+    \vdots & \vdots & \vdots \\
+    Domingo & $O_1$ & $E_1$ \\
+    \vdots & \vdots & \vdots \\
+    Domingo & $O_{52}$ & $E_{52}$ \\
+    \hline
+    \end{tabular}
+    \caption{Exemplo de tabela de frequências usada no teste Qui-Quadrado}
+    \label{tab:my_label}
+\end{table}
+
+A estatística do teste Qui-Quadrado é a seguinte:
+\begin{equation}
+    \chi^2 = \sum_{i=1}^{s}\frac{(O_{i} - E_{i})^2}{E_{i}},
+\end{equation}
+em que $s$ é o número de observações, no nosso caso 53 para as segundas-feiras e 52 para o restante dos dias da semana.
+
+% %----------------------------------------------------------------------------------------
+% %	METODOLOGIA
+% %----------------------------------------------------------------------------------------
+\chapter{METODOLOGIA}
+\section{Criação de base de dados da SSP}
+Para a criação da base de dados de B.O. de furtos e roubos da SSP efetuamos os seguintes passos:
+\begin{itemize}
+    \item Download dos arquivos em Excel no site \url{http://www.ssp.sp.gov.br/transparenciassp/Consulta.aspx} através do \textit{scrapper} no Apêndice A (pode ser utilizado para baixar outros dados também);
+    \item Como nós temos um arquivo de Excel por mês para B.O. de furto e roubo, concatenamos cada arquivo para formar um arquivo completo de furtos e outro de roubos, respectivamente furtosConcat.csv e roubosConcat.csv como está no Apêndice B;
+    \item Com as bases criadas no passo anterior, mantivemos apenas as informações do ano de 2018 e que são da cidade de São Paulo e adicionamos a variável que indica o dia da semana da ocorrência, que chamamos de 'DIASEMANA'. Como resultado, teremos duas bases: furtos\_2018.csv e roubos\_2018.csv.
+\end{itemize}
+
+O respectivo código encontra-se no Apêndice C.
+
+\section{Criação dos mapas de calor/marcadores com os dados da SSP}
+Uma forma útil de analisar os focos de furtos e de roubos em uma determinada região, é a geração de mapas de calor, onde as "regiões de calor" com tons mais avermelhados representam os locais que tiveram maior ocorrência de furtos/roubos e as "regiões de calor" com tons mais azulados representam os locais que tiveram menor ocorrência de furtos/roubos.
+
+Uma outra abordagem é a geração de mapas de marcadores, onde contamos quantos furtos/roubos ocorrem em um mesmo local e colocamos um marcador com a respectiva quantidade de ocorrências.
+
+Para a criação dos mapas de calor, efetuamos os seguintes passos, tanto para furtos, tanto para roubos:
+\begin{itemize}
+    \item Com as bases descritas na seção anterior, removemos as linhas que não contém valores nos campos de latitude, longitude, bairro ou cidade;
+    \item Utilizando o pacote Folium, iniciamos um mapa com as coordenadas centrais da cidade de São Paulo: [-23.5475, -46.63611];
+    \item A fim de que o Folium possa identificar corretamente os valores de geolocalização, atribuímos às colunas de latitude e de longitude a uma estrutura de lista;
+    \item Adicionamos essa lista a um mapa de calor e o salvamos no formato HTML.
+\end{itemize}
+
+Para a geração dos mapas de marcadores, efetuamos os seguintes passos, tanto para furtos, quanto para roubos:
+\begin{itemize}
+    \item Com as bases descritas na seção anterior, removemos as linhas que não contém valores nos campos de latitude, longitude, bairro ou cidade;
+    \item Utilizando o pacote Folium, iniciamos um mapa com as coordenadas centrais da cidade de São Paulo: [-23.5475, -46.63611];
+    \item A fim de que o Folium possa identificar corretamente os valores de geolocalização, atribuímos às colunas de latitude e de longitude a uma estrutura de lista;
+    \item Adicionamos cada elemento da lista ao marcador e automaticamente o pacote Folium agrupa e soma a quantidade de furtos e roubos dependendo do \textit{zoom} que é escolhido\footnote{Para agrupamentos menores, dependendo do \textit{zoom} escolhido, alguns focos poderão ser agrupados com outros e centralizados em uma região de acordo com a latitude e longitude. Assim, a comparação de focos menores para o mapa de calor e mapa de marcadores pode ter algumas diferenças.}. 
+    \item Salvamos o mapa de marcador no formato HTML.
+\end{itemize}
+
+
+O código deste item encontra-se no Apêndice D.
+
+\section{Geração de análises descritivas e gráficos}
+Para verificar a distribuição dos dados, geramos um \textit{boxplot} da quantidade de furtos de carros por dia da semana, um histograma para cada dia da semana mostrando a distribuição dos furtos, medidas descritivas da quantidade de furtos por dia da semana, um \textit{boxplot} da quantidade de furtos de carros por período do dia e por último medidas descritivas para a  quantidade de furtos por período do dia. Todas essas análises também foram feitas para o número de roubos. Todo o processo consta no Apêndice E.
+
+\section{Checagem para testar se as ocorrências de B.O.'s se aproximam de uma distribuição de \textit{Poisson}}
+Como nosso objetivo é ver se a distribuição da ocorrência dos B.O.'s de furto e roubo de carros na cidade de São Paulo em 2018 aproxima-se de uma \textit{Poisson} e assim afirmar que a ocorrencia de sinistros de seguro de carros (subconjunto do conjunto de carros com B.O. por furto ou roubo) também se aproxima de uma distribuição de \textit{Poisson}, realizamos as seguintes etapas:
+\begin{itemize}
+    \item Agrupamos os dados de B.O. relativos ao ano de 2018 por dia da semana e contamos quantos B.O.'s foram abertos em cada dia da semana em 2018;
+    \item Tendo isso, para obtermos o parâmetro $\lambda$ da nossa \textit{Poisson}, dividimos estes valores pela quantidade dos respectivos dias da semana em 2018 (53 para segunda-feira e 52 para os outros dias da semana);
+    \item Após isso, simulamos 53 valores aleatórios de \textit{Poisson} para a segunda-feira e 52 para cada um dos outros dias da semana usando a \textit{seed} = 42 para permitir a replicabilidade da simulação;
+    \item Tendo assim os valores observados (número de boletins de ocorrência para cada dia da semana do ano) e os valores esperados (número simulado através do método aleatório \textit{numpy.random.poisson}($\lambda$, QTD)) realizamos um teste Qui-Quadrado de aderência para cada dia da semana.
+\end{itemize}
+
+O respectivo código encontra-se no Apêndice F.
+
+% %----------------------------------------------------------------------------------------
+% %	RESULTADOS
+% %----------------------------------------------------------------------------------------
+
+\chapter{RESULTADOS}
+
+\section{Mapas de calor}
+Na presente seção, mostraremos imagens estáticas dos mapas de calor. Para tal, escolhemos, a título de ilustração,  as regiões da Avenida Paulista e da Cidade Universitária Armando de Salles Oliveira. 
+
+A seguir analisaremos os mapas de calor para furtos e em seguida, para roubos.
+
+\subsection{Mapas de calor para furtos}
+Para furtos, mostramos abaixo os mapas de calor da Avenida Paulista e da Cidade Universitária Armando de Salles Oliveira.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[max width=\linewidth]{Maps/Heat_Av_Paulista_Furtos_2018.png}
+\caption{Mapa de calor da ocorrência de furtos em 2018 na Avenida Paulista.}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[max width=\linewidth]{Maps/Heat_USP_Furtos_2018.png}
+\caption{Mapa de calor da ocorrência de furtos em 2018 na Cidade Universitária Armando de Salles Oliveira.}
+\end{figure}
+
+Vemos com os dois mapas acima que temos mais focos de furtos na região da Avenida Paulista do que na Cidade Universitária Armando de Salles Oliveira.
+
+Na região da  Avenida Paulista, vemos que os focos de furtos  concentram-se na região do Museu de Arte de São Paulo Assis Chateaubriand e nas ruas paralelas, principalmente na direção do centro da cidade de São Paulo. Vemos também que existe grandes focos de furtos no entorno da região da Avenida 23 de Maio, que pertence ao bairro do Paraíso.
+
+Já na região da Cidade Universitária Armando de Salles Oliveira, temos quatro focos principais de furtos: Portão 1, Avenida Lineu Prestes próximo ao Instituto de Química, Portão 3 e Avenida Professor Melo Moraes próximo á Praça do Relógio. Além destes focos, temos grandes focos de furtos no entorno da cidade universitária, principamente na região da Vila Indiana e do Jaguaré.
+
+\subsection{Mapas de calor para roubos}
+Para roubos, como anteriormente, mostramos a seguir os mapas de calor da Avenida Paulista e da Cidade Universitária Armando de Salles Oliveira.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[max width=\linewidth]{Maps/Heat_Av_Paulista_Roubos_2018.png}
+\caption{Mapa de calor da ocorrência de roubos em 2018 na Avenida Paulista.}
+\end{figure}
+\newpage
+\begin{figure}[!htbp]
+\centering
+\includegraphics[max width=\linewidth]{Maps/Heat_USP_Roubos_2018.png}
+\caption{Mapa de calor da ocorrência de roubos em 2018 na Cidade Universitária Armando de Salles Oliveira.}
+\end{figure}
+
+Vemos com os dois mapas acima que temos mais focos de roubos na região da Avenida Paulista do que na Cidade Universitária Armando de Salles Oliveira.
+
+Na região da  Avenida Paulista, vemos que os focos de roubos  concentram-se na região do Museu de arte de São Paulo Assis Chateaubriand e nas ruas paralelas, principalmente na direção do centro da cidade de São Paulo. Vemos também que existe grandes focos de roubos no entorno da região da Avenida 23 de Maio, que pertence ao bairro do Paraíso.
+
+Já na região da Cidade Universitária Armando de Salles Oliveira, temos quatro focos principais de roubos em ordem de concentração: Portão 1, Avenida Lineu Prestes próximo ao Instituto de Química, Portão 3 e Avenida Professor Melo Moraes próximo á Praça do Relógio. Além destes focos, temos grandes focos de roubos no entorno da cidade universitária, principamente na região da Vila Indiana e do Jaguaré.
+
+Outro fato que se evidencia com os mapas de calor para furtos e roubos é que vemos focos menores de roubos do que de furtos. Principalmente na região da Avenida Paulista.
+
+\section{Mapas de marcadores}
+Para acompanhar e refinar a análise feita através dos mapas de calor, mostraremos imagens estáticas de mapas de marcadores. Aqui, escolhemos novamente as regiões da Avenida Paulista e da Cidade Universitária Armando de Salles Oliveira para a ilustração.
+
+A seguir analisaremos os mapas de marcadores para furtos e em seguida, para roubos.
+
+\subsection{Mapas de marcadores para furtos}
+Para furtos, mostramos abaixo os mapas de marcadores da Avenida Paulista e da Cidade Universitária Armando de Salles Oliveira.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[max width=\linewidth]{Maps/Marker_Av_Paulista_Furtos_2018.png}
+\caption{Mapa de marcadores da ocorrência de furtos em 2018 na Avenida Paulista.}
+\end{figure}
+\newpage
+\begin{figure}
+\centering
+\includegraphics[max width=\linewidth]{Maps/Marker_USP_Furtos_2018.png}
+\caption{Mapa de marcadores da ocorrência de furtos em 2018 na Cidade Universitária Armando de Salles Oliveira.}
+\end{figure}
+
+Aqui podemos quantificar melhor os focos de furtos abordados na seção anterior. Vemos, por exemplo, que o foco de furto no Portão 1 é de mesma magnitude que o foco na Avenida Lineu Prestes próximo ao Instituto de Química. Vemos também que os focos no Portão 3  encontram-se mais espalhados e descentralizados, principalmente na vizinhança externa à universidade.
+
+\subsection{Mapas de marcadores para roubos}
+Para roubos, mostramos abaixo os mapas de marcadores da Avenida Paulista e da Cidade Universitária Armando de Salles Oliveira.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[max width=\linewidth]{Maps/Marker_Av_Paulista_Roubos_2018.png}
+\caption{Mapa de marcadores da ocorrência de roubos em 2018 na Avenida Paulista.}
+\end{figure}
+\newpage
+\begin{figure}
+\centering
+\includegraphics[max width=\linewidth]{Maps/Marker_USP_Roubos_2018.png}
+\caption{Mapa de marcadores da ocorrência de roubos em 2018 na Cidade Universitária Armando de Salles Oliveira.}
+\end{figure}
+
+Vemos com o mapa da região da Avenida Paulista, que temos focos pequenos de roubos na região com excessão do foco que fica na Avenida Nove de Julho próximo a Alameda Itu.
+
+Para o mapa da região da Cidade Universitária Armando de Salles Oliveira vemos grandes focos de roubos na região da Vila Indiana e do Jaguaré.
+
+\section{Medidas Descritivas}
+\subsection{Resultados para furtos e roubos por dia da semana}
+Inicialmente, apresentamos medidas descritivas para a quantidade de furtos e roubos por dia da semana.
+
+\begin{table}[H]
+\centering
+\centerline{\includegraphics[width=1.3\textwidth,keepaspectratio]{Results/describe_furtos_dia_da_semana.png}}
+\caption{Estatísticas para a quantidade de furtos por dia da semana.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\centerline{\includegraphics[width=1.3\textwidth,keepaspectratio]{Results/describe_roubos_dia_da_semana.png}}
+\caption{Estatísticas para a quantidade de roubos por dia da semana.}
+\end{table}
+
+Vemos que em 2018 ocorreu, em média, mais roubos por dia da semana do que furtos. Além disso, o número mínimo de roubos por dia da semana também é maior do que o número mínimo de furtos. O mesmo ocorre com o número máximo de roubos e furtos. Estes resultados  tornam-se mais relevantes nos gráficos \textit{boxplot} da quantidade de furtos e roubos por dia da semana, que segue abaixo:
+
+\begin{figure}
+\centering
+\includegraphics[max width=\linewidth]{Results/boxplot_dia_da_semana_furtos_2018.png}
+\caption{Gráfico de \textit{boxplot} para a quantidade de furtos por dia da semana.}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[max width=\linewidth]{Results/boxplot_dia_da_semana_roubos_2018.png}
+\caption{Gráfico de \textit{boxplot} para a quantidade de roubos por dia da semana.}
+\end{figure}
+
+Em uma primeira vista, vemos que para furtos, temos uma tendência de aumento de ocorrências na terça e na quarta, decaindo nos outros dias da semana, vemos também que temos mais \textit{outliers} em furtos do que em roubos.
+
+\subsection{Resultados para furtos e roubos por período do dia}
+
+Como na seção anterior, realizamos também a análise descritiva para a quantidade de furtos e roubos por período do dia.
+
+\begin{table}[H]
+\centering
+\centerline{\includegraphics[width=1.3\textwidth,keepaspectratio]{Results/describe_furtos_periodo_ocorrencia.png}}
+\caption{Estatísticas para a quantidade de furtos por período do dia.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\centerline{\includegraphics[width=1.3\textwidth,keepaspectratio]{Results/describe_roubos_periodo_ocorrencia.png}}
+\caption{Estatísticas para a quantidade de roubos por período do dia.}
+\end{table}
+
+Vemos, inicialmente, que em média, ocorre mais roubos do que furtos de noite e de madrugada. Vemos também que a mediana acompanha o crescimento da média. Além disso, vemos claramente que, em todos os períodos do dia, temos mais roubos do que furtos.
+
+Agora veremos os gráficos  \textit{boxplot} para para a quantidade de furtos e roubos por período do dia.
+
+\begin{figure}
+\centering
+\includegraphics[max width=\linewidth]{Results/boxplot_periodo_do_dia_furtos_2018.png}
+\caption{Gráficos  \textit{boxplot} para a quantidade de furtos por período do dia.}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[max width=\linewidth]{Results/boxplot_periodo_do_dia_roubos_2018.png}
+\caption{Gráficos \textit{boxplot} para a quantidade de roubos por período do dia.}
+\end{figure}
+
+Vemos que, no geral, os dados para roubos têm menor dispersão, porém têm mais \textit{outliers}. Vemos também que para furtos, temos uma maior dispersão no período da manhã e para roubos temos uma maior dispersão no período da noite.
+
+\section{Testes de Aderência e Resultados}
+Nesta seção, realizamos um teste de Qui-Quadrado para Aderência para testar a hipótese nula de que a distribuição da quantidade de furtos e roubos por dia da semana em 2018 se aproxima de uma distribuição de \textit{Poisson}.
+
+\subsection{Resultado do teste de Aderência para furtos}
+Para a base de furtos de 2018, realizamos 7 testes de Aderência, um para cada dia da semana, querendo testar se a distribuição da quantidade de furtos por dia da semana se aproxima de uma distribuição de \textit{Poisson}.
+Logo, para cada dia da semana temos:
+
+\begin{itemize}
+    \item $H_0$: a distribuição da quantidade de furtos para cada dia da semana durante o ano de 2018 se aproxima de uma distribuição de \textit{Poisson}.
+    \item $H_1$: a distribuição da quantidade de furtos para cada dia da semana durante o ano de 2018 não se aproxima de uma distribuição de \textit{Poisson}.
+\end{itemize}
+
+Abaixo vemos os resultados dos 7 testes:
+
+\begin{table}[H]
+\centering
+\centerline{\includegraphics[width=1.3\textwidth,keepaspectratio]{Results/qui-quadrado_resultados_furtos_2018.png}}
+\caption{Tabela de resultados do teste de Aderência Qui-Quadrado para a quantidade de furtos por dia da semana.}
+\end{table}
+
+A coluna "TOTAL" refere-se à quantidade de furtos ocorridos no dia da semana e "QTD" é a quantidade de dias para cada dia da semana em 2018. Assim, fazendo TOTAL/QTD, obtemos a coluna "LAMBDA" que é o parâmetro usado para simular os QTD valores esperados da distribuição de \textit{Poisson} e assim realizar o teste de Aderência.
+
+A coluna "chi\_square" é a estatística do teste Qui-Quadrado para Aderência e em seguida vemos a coluna do p-valor.
+
+Para todos os testes realizados, vemos que o nosso p-valor é demasiadamente pequeno, ou seja, há evidências para rejeitar $H_0$.
+
+\subsection{Resultado do teste de Aderência para roubos}
+Para a base de roubos de 2018, também realizamos 7 testes de Aderência, um para cada dia da semana, querendo testar se a distribuição da quantidade de roubos por dia da semana se aproxima de uma distribuição de \textit{Poisson}.
+Logo, igual ao caso anterior, temos para cada dia da semana:
+
+\begin{itemize}
+    \item $H_0$: a distribuição da quantidade de roubos para cada dia da semana durante o ano de 2018 se aproxima de uma distribuição de \textit{Poisson}.
+    \item $H_1$: a distribuição da quantidade de roubos para cada dia da semana durante o ano de 2018 não se aproxima de uma distribuição de \textit{Poisson}.
+\end{itemize}
+
+Abaixo vemos os resultados dos 7 testes:
+
+\begin{table}[H]
+\centering
+\centerline{\includegraphics[width=1.3\textwidth,keepaspectratio]{Results/qui-quadrado_resultados_roubos_2018.png}}
+\caption{Tabela de resultados do teste de Aderência Qui-Quadrado para a quantidade de roubos por dia da semana.}
+\end{table}
+
+Igualmente à seção anterior, a coluna "TOTAL" refere-se a quantidade de roubos ocorridos no dia da semana e "QTD" é a quantidade de dias para cada dia da semana em 2018. Assim, fazendo TOTAL/QTD, obtemos a coluna "LAMBDA" que é o parâmetro usado para simular os QTD valores esperados da distribuição de \textit{Poisson} e assim realizar o teste de Aderência.
+
+A coluna "chi\_square" é a estatística do teste Qui-Quadrado para Aderência e em seguida vemos a coluna do p-valor.
+
+Para todos os testes realizados, também vemos que o nosso p-valor é demasiadamente pequeno, ou seja, há evidências para rejeitar a hipótese $H_0$.
+
+%----------------------------------------------------------------------------------------
+% %	CONCLUSÕES
+%----------------------------------------------------------------------------------------
+
+\chapter{Conclusões}
+
+\section{Conclusões}
+No presente trabalho, observamos que a base de dados da Secretaria de Segurança Pública do Estado de São Paulo, além de ser de fácil acesso, é de fácil interpretação. Isso se mostrou de muito valor para o desenvolvimento das análises. Com isso, conseguimos rapidamente estudar e analisar os dados.
+
+Um fato importante a ressaltar é que apesar das análises estatísticas mostrarem uma ocorrência maior de roubos do que de furtos da cidade de São Paulo, de uma forma geral os dois mapas escolhidos mostraram o contrário, indicando que existem outras regiões da cidade que possuem focos maiores de roubos. 
+
+Por fim, concluímos que na cidade de São Paulo no ano de 2018 ocorreu, em média, mais roubos do que furtos por dia da semana e mais roubos do que furtos de noite e de madrugada. Além desses resultados iniciais, vimos que a distribuição de roubos e furtos por dia da semana não se aproxima de uma \textit{Poisson}. Este último resultado nos faz refletir sobre a utilização da distribuição de Poisson nos modelos de seguradoras, o que pode ser de interesse de estudo num futuro próximo.
+
+\postextual
+
+% %----------------------------------------------------------------------------------------
+% %	BIBLIOGRAFIA
+% %----------------------------------------------------------------------------------------
+\printbibliography[title={Referências}]
+
+%----------------------------------------------------------------------------------------
+% %	ANEXOS
+%----------------------------------------------------------------------------------------
+
+\begin{anexosenv}
+\partanexos
+\chapter{Scrapper para download dos dados da SSP}
+
+\begin{lstlisting}[frame=single]
+import re
+import pandas as pd
+import xlrd
+import requests
+from bs4 import BeautifulSoup
+
+headers = {
+    'Origin': 'http://www.ssp.sp.gov.br',
+    'Accept-Encoding': 'gzip, deflate',
+    'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7,es;q=0.6',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'Cache-Control': 'max-age=0',
+    'Referer': 'http://www.ssp.sp.gov.br/transparenciassp/',
+    'Connection': 'keep-alive',
+}
+
+def get_viewstate_eventvalidation(html):
+    """
+    Extract __VIEWSTATE and __EVENTVALIDATION
+    """
+    soup = BeautifulSoup(html, 'lxml')
+    viewstate = soup.find('input', attrs={'id': '__VIEWSTATE'})
+    viewstate_value = viewstate['value']
+    eventvalidation = soup.find('input', attrs={'id': '__EVENTVALIDATION'})
+    eventvalidation_value = eventvalidation['value']
+
+    return viewstate_value, eventvalidation_value
+
+def get_response(session, viewstate, event_validation, event_target, outro=None, stream=False, hdfExport=''):
+    """
+    Handles all the responses received from every request made to the website.
+    """
+    url = "http://www.ssp.sp.gov.br/transparenciassp/"
+    data = [
+        ('__EVENTTARGET', event_target),
+        ('__EVENTARGUMENT', ''),
+        ('__VIEWSTATE', viewstate),
+        ('__EVENTVALIDATION', event_validation),
+        ('ctl00$cphBody$hdfExport', hdfExport),
+
+    ]
+
+    if outro:
+        data.append(('ctl00$cphBody$filtroDepartamento', '0'))
+        data.append(('__LASTFOCUS', ''))
+
+    response = session.post(url, headers=headers, data=data, stream=stream)
+    return response
+
+
+def extract_file_name(response_headers):
+    """
+    Tries to extract the filename returned from the response of the request.
+    """
+
+    try:
+        file_name = re.search('=.*xls', response_headers)
+        file_name = file_name.group().replace('=', '')
+    except Exception:
+        file_name = "dados.xls"
+
+    return file_name
+
+def extract_year(information, directory, write_to_disk=True):
+    """
+    Returns a dataframe with the information from the website.
+    If write_to_disk is True, then a xls file is created on disk.
+    """
+    print("Extracting")
+    session = requests.session()
+
+    url = "http://www.ssp.sp.gov.br/transparenciassp/"
+
+    response = session.post(url, headers=headers)
+    viewstate, eventvalidation = get_viewstate_eventvalidation(response.text)
+
+    for j in range(2003, 2020):
+        year = str(j)
+        print("Ano: "+year)
+        year = year[-2:]
+        year = year.lstrip("0")
+        year_value = "ctl00$cphBody$lkAno{}".format(year)
+
+        for i in range(1, 13):
+            month = str(i)
+            month_value = "ctl00$cphBody$lkMes{}".format(month)
+            print("Mes: "+month)
+
+            parameters_list = [
+                [information],
+                [month_value, True, False],
+                [year_value, True, False],
+            ]
+            for parameters in parameters_list:
+                response = get_response(
+                    session, viewstate, eventvalidation, *parameters)
+                html = response.text
+                viewstate, eventvalidation = get_viewstate_eventvalidation(html)
+
+            response = get_response(session,
+                                    viewstate,
+                                    eventvalidation,
+                                    'ctl00$cphBody$ExportarBOLink',
+                                    True,
+                                    True,
+                                    0)
+            file_name = extract_file_name(response.headers['content-disposition'])
+            print(file_name)
+            ssp_data = response.text.split('\n')
+            corrected_ssp_data = []
+            for dado in ssp_data:
+                dado_corrigido = re.split('\t{1}', dado)
+                corrected_ssp_data.append(dado_corrigido)
+
+            if write_to_disk:
+                header = corrected_ssp_data[0]
+                corrected_ssp_data = corrected_ssp_data[1:]
+                df = pd.DataFrame(corrected_ssp_data)
+                df.to_excel(directory + "\\" +
+                            file_name, index=False, encoding='utf-8', header=header)
+
+def run(directory, write_to_disk=True):
+    """
+    Interactive optin to run the scraper.
+    Choose an option, a month and a year to download the corrected information.
+    """
+    print("Opcoes:")
+    print("1 - Homicidio Doloso")
+    print("2 - Latrocinio")
+    print("3 - Lesao Corporal Seguida de Morte")
+    print("4 - Morte Decorrente de Oposicao A Intervencao Policial")
+    print("5 - Morte Suspeita")
+    print("6 - Furto de Veiculo")
+    print("7 - Roubo de Veiculo")
+    print("8 - Furto de Celular")
+    print("9 - Roubo de Celular")
+    print("10 - Feminicidio")
+    print("11 - Registro de Obitos - IML")
+    option = int(input("Escolha a opcao: "))
+
+    informations = {
+        1: "ctl00$cphBody$btnHomicicio",
+        2: "ctl00$cphBody$btnLatrocinio",
+        3: "ctl00$cphBody$btnLesaoMorte",
+        4: "ctl00$cphBody$btnMortePolicial",
+        5: "ctl00$cphBody$btnMorteSuspeita",
+        6: "ctl00$cphBody$btnFurtoVeiculo",
+        7: "ctl00$cphBody$btnRouboVeiculo",
+        8: "ctl00$cphBody$btnFurtoCelular",
+        9: "ctl00$cphBody$btnRouboCelular",
+        10: "ctl00$cphBody$btnFeminicidio",
+        11: "ctl00$cphBody$btnIML"
+    }
+
+    information = informations[option]
+
+    return extract_year(information, directory, write_to_disk)
+
+def main():
+
+    directory = str(input("Digite o diretorio para salvar os dados: "))
+    run(directory, True)
+
+if __name__ == "__main__":
+    main()
+\end{lstlisting}
+
+\chapter{Junção dos dados da SSP}
+\include{Codes/APPEND_SSPData}
+
+\chapter{Criação das bases de furtos e roubos de 2018}
+\include{Codes/create_DF_furtos_roubos_2018}
+
+\chapter{Criação dos mapas de calor/marcadores}
+\include{Codes/SSP_HeatMap}
+
+\chapter{Geração da análise descritiva dos dados}
+\section{Código para realização da análise descritiva referente a base de furtos}
+\include{Codes/estatSSP_furtos}
+
+\section{Código para realização da análise descritiva referente a base de roubos}
+\include{Codes/estatSSP_roubos}
+
+\chapter{Realização do teste de hipótese para furtos e roubos}
+\section{Realização do teste de hipótese para os dados de furtos}
+\include{Codes/POISSON_FURTOS}
+
+\section{Realização do teste de hipótese para os dados de roubos}
+\include{Codes/POISSON_ROUBOS}
+\end{anexosenv}
+\end{document}
